@@ -31,8 +31,8 @@ This is a runtime-only controller for the exact `libmisound.so` build analyzed i
 - `status`: runtime status.
 
 ## Important limitations
-- This is a reverse-engineered, build-specific experiment, not a vendor-supported API. It is not tested against the live phone from this environment.
-- The ten frequencies shown (31, 62, 125, 250, 500, 1k, 2k, 4k, 8k, 16k Hz) are a conventional assumed display order; confirm by listening/testing. The library may use a seven-band fallback if the ten-band resource module is absent.
+- This is a reverse-engineered, build-specific experiment, not a vendor-supported API.
+- It isn't guaranteed that it'll work on every libmisound.so.
 - EQ values are sent as ten float words to the native parameter-3 array path. The code validates binary signatures but cannot prove the active resource layout or gain semantics on every device. Start with `eqshow`, then `preset bass`/`preset treble` at low volume.
 - The stock snapshot is per handler and held in the Frida agent's memory. If the agent is restarted after an EQ change, the old snapshot is lost. `stockeq` restores the snapshot captured for the current handler, not a file-backed factory backup.
 - Native/EQ reapplication is event-driven only (new handler or callback gap) and queued asynchronously with a short delay so the setter is not called directly on the real-time audio callback thread. Thread-safety is still not guaranteed by the vendor. If audio glitches/crashes, detach only after clearing `hardoff`, or restart the audio service/device as a recovery path.
